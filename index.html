@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>library Project</title>
+    <link rel="stylesheet" href="asset/css/style.css">
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Page numbres</th>
+        <th>read</th>
+        <th>delete</th>
+      </tr>
+
+    </table>
+
+    <div class="user_input">
+      <button id="addbook_btn">
+        add book
+      </button>
+      <div id="addbook_form" class="hide_element">
+        <form >
+          <label for="title">Title:</label><br>
+          <input type="text" id="title" name="title" placeholder="Book title" required><br>
+          <label for="author">Author:</label><br>
+          <input type="text" id="author" name="author" placeholder="Book author" required><br>
+          <label for="pagesnum">Pages number:</label><br>
+          <input type="number" name="pagesnum" id="pagesnum" placeholder="Pages numbers" required><br>
+  
+          <fieldset id="read" class="radio">
+            <label for="readtrue">Already read it:</label><br>
+            <input type="radio" id="readtrue" name="read" value="true"><br>
+            <label for="readfalse">Haven't Read it yet:</label><br>
+            <input type="radio" id="readfalse" name="read" value="false" checked><br>
+          </fieldset>
+
+        </form>
+        <button id='submit_book_data'>
+          Submit Book info
+        </button>
+        <button id='cancel_book_data'>
+          Cancel
+        </button>
+      </div>
+    </div>
+    <script src="asset/script/main.js"></script>
+  </body>
+</html>
