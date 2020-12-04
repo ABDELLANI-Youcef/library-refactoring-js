@@ -1,15 +1,6 @@
 const myLibrary = localStorage.getItem('myLibrary') ? JSON.parse(localStorage.getItem('myLibrary')) : [];
 let count = localStorage.getItem('count') ? JSON.parse(localStorage.getItem('count')) : 0;
 
-function Book(title, author, pageNums, read = false) {
-  this.title = title;
-  this.author = author;
-  this.pageNums = pageNums;
-  this.read = read;
-  this.count = count;
-  count += 1;
-}
-
 function findBook(index) {
   let min = 0;
   let max = myLibrary.length - 1;
@@ -40,69 +31,76 @@ function removeFromLibrary(index) {
   localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
 }
 
+const Book = (title, author, pageNums, read = false) => {
+  const bookId = count;
+  count += 1;
+  const addBookToPage = () => {
+    const table = document.querySelector('table');
+    const row = document.createElement('tr');
+    row.setAttribute('id', `row_${bookId}`);
+    const titleTd = document.createElement('td');
+    titleTd.textContent = title;
+    row.appendChild(titleTd);
+
+    const authorTd = document.createElement('td');
+    authorTd.textContent = author;
+    row.appendChild(authorTd);
+
+    const pageNumsTd = document.createElement('td');
+    pageNumsTd.textContent = pageNums;
+    row.appendChild(pageNumsTd);
+
+    const readTd = document.createElement('td');
+    const readBtn = document.createElement('button');
+    readBtn.classList.add('reading_status');
+    readBtn.textContent = read;
+    readBtn.setAttribute('id', `read_${bookId}`);
+    readBtn.dataset.indexNumber = bookId;
+    readTd.appendChild(readBtn);
+    row.appendChild(readTd);
+
+    readBtn.addEventListener('click', (e) => {
+      const index = e.target.dataset.indexNumber;
+      const i = findBook(index);
+      changeReadStatus(i);
+      e.target.textContent = myLibrary[i].read;
+    });
+
+    const removeTd = document.createElement('td');
+    const removeBtn = document.createElement('button');
+    removeBtn.classList.add('remove_book');
+    removeBtn.textContent = 'Delete Book';
+    removeTd.appendChild(removeBtn);
+    row.appendChild(removeTd);
+    table.appendChild(row);
+
+    removeBtn.setAttribute('id', `delete_${this.count}`);
+    removeBtn.dataset.indexNumber = bookId;
+    removeBtn.addEventListener('click', (e) => {
+      const index = e.target.dataset.indexNumber;
+      removeFromLibrary(index);
+      const table = document.querySelector('table');
+      const target = document.querySelector(`#row_${index}`);
+      table.removeChild(target);
+    });
+  };
+  return {
+    title, author, pageNums, read, count: bookId, addBookToPage,
+  };
+};
+
+
 function addBookToLibrary(title, author, pageNum, read = false) {
-  const book = new Book(title, author, pageNum, read);
+  const book = Book(title, author, pageNum, read);
   myLibrary.push(book);
 }
 
 function dispalybooks(arr) {
   for (let i = 0; i < arr.length; i += 1) {
-    Object.setPrototypeOf(arr[i], Book.prototype);
+    arr[i] = Book(arr[i].title, arr[i].author, arr[i].pageNum, arr[i].read);
     arr[i].addBookToPage();
   }
 }
-
-Book.prototype.addBookToPage = function show() {
-  const table = document.querySelector('table');
-  const row = document.createElement('tr');
-  row.setAttribute('id', `row_${this.count}`);
-  const titleTd = document.createElement('td');
-  titleTd.textContent = this.title;
-  row.appendChild(titleTd);
-
-  const authorTd = document.createElement('td');
-  authorTd.textContent = this.author;
-  row.appendChild(authorTd);
-
-  const pageNumsTd = document.createElement('td');
-  pageNumsTd.textContent = this.pageNums;
-  row.appendChild(pageNumsTd);
-
-  const readTd = document.createElement('td');
-  const readBtn = document.createElement('button');
-  readBtn.classList.add('reading_status');
-  readBtn.textContent = this.read;
-  readBtn.setAttribute('id', `read_${this.count}`);
-  readBtn.dataset.indexNumber = this.count;
-  readTd.appendChild(readBtn);
-  row.appendChild(readTd);
-
-  readBtn.addEventListener('click', (e) => {
-    const index = e.target.dataset.indexNumber;
-    const i = findBook(index);
-    changeReadStatus(i);
-    e.target.textContent = myLibrary[i].read;
-  });
-
-  const removeTd = document.createElement('td');
-  const removeBtn = document.createElement('button');
-  removeBtn.classList.add('remove_book');
-  removeBtn.textContent = 'Delete Book';
-  removeTd.appendChild(removeBtn);
-  row.appendChild(removeTd);
-  table.appendChild(row);
-
-  removeBtn.setAttribute('id', `delete_${this.count}`);
-  removeBtn.dataset.indexNumber = this.count;
-  removeBtn.addEventListener('click', (e) => {
-    const index = e.target.dataset.indexNumber;
-    removeFromLibrary(index);
-    const table = document.querySelector('table');
-    const target = document.querySelector(`#row_${index}`);
-    table.removeChild(target);
-  });
-};
-
 
 // Adding Book button
 
