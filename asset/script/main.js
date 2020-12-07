@@ -42,7 +42,7 @@ class Book {
     count += 1;
   }
 
-  addBookToPage(){
+  addBookToPage() {
     const table = document.querySelector('table');
     const row = document.createElement('tr');
     row.setAttribute('id', `row_${this.count}`);
@@ -91,9 +91,8 @@ class Book {
       const target = document.querySelector(`#row_${index}`);
       table.removeChild(target);
     });
-  };
+  }
 }
-
 
 
 function addBookToLibrary(title, author, pageNum, read = false) {
